@@ -15,17 +15,20 @@ app.listen(port, () => {
 app.get("/plexRefresh", async (req, res) => {
   try {
     // Plex Refresh Movies
-    console.log(await RefreshPlexMovies(req, res));
+    await console.log(RefreshPlexMovies(req, res));
 
     // Plex Refresh Tv
-    console.log(await RefreshPlexTv(req, res));
+    await console.log(RefreshPlexTv(req, res));
 
     // Overseerr Login
     let connectSid = await OverseerrLogin(req, res);
     console.log("Overseerr Login successful: " + connectSid);
 
+    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    await sleep(config.plexOverseerrWait);
+
     // Overseerr RefreshMedia
-    console.log(await OverseerrMediaRefresh(connectSid, res));
+    await console.log(OverseerrMediaRefresh(connectSid, res));
 
     console.log("Refresh Complete");
     res.statusCode = 200;
