@@ -1,0 +1,20 @@
+{
+  "name": "resthomeserver",
+  "version": "1.0.0",
+  "description": "This Web Server designed to handle API calls to my Home Server. Specifically integrating the refreshing of my plex libraries and Overseerr media avaliability scans.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tullysemovic/RESTHomeServer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tullysemovic/RESTHomeServer/issues"
+  },
+  "homepage": "https://github.com/tullysemovic/RESTHomeServer#readme"
+}
