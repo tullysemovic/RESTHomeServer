@@ -8,8 +8,12 @@ config.plex = {
 
 config.overseerr = {
   urlLogin: "***REMOVED***",
+  urlAvailabilitySync:
+    "***REMOVED***",
   email: "***REMOVED***",
   password: "***REMOVED***",
+  apiKey:
+    "***REMOVED***",
 };
 
 config.port = 3000;
