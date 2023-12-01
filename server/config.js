@@ -8,8 +8,12 @@ config.plex = {
 
 config.overseerr = {
   urlLogin: "http://streaming.home.local/api/v1/auth/local",
+  urlAvailabilitySync:
+    "http://streaming.home.local/api/v1/settings/jobs/availability-sync/run",
   email: "***REMOVED***",
   password: "***REMOVED***",
+  apiKey:
+    "***REMOVED***",
 };
 
 config.port = 3000;
