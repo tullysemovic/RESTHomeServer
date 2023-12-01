@@ -17,5 +17,6 @@ config.overseerr = {
 };
 
 config.port = 3000;
+config.plexOverseerrWait = 10000;
 
 module.exports = config;
