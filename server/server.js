@@ -13,25 +13,82 @@ app.listen(port, () => {
 });
 
 app.get("/plexRefresh", async (req, res) => {
-  //await RefreshPlexMovies(req, res);
-  //await RefreshPlexTv(req, res);
+  try {
+    // Plex Refresh Movies
+    console.log(await RefreshPlexMovies(req, res));
+
+    // Plex Refresh Tv
+    console.log(await RefreshPlexTv(req, res));
+
+    // Overseerr Login
+    let connectSid = await OverseerrLogin(req, res);
+    console.log("Overseerr Login successful: " + connectSid);
+
+    // Overseerr RefreshMedia
+    console.log(await OverseerrMediaRefresh(connectSid, res));
+
+    console.log("Refresh Complete");
+    res.statusCode = 200;
+    res.end("Refresh Complete");
+  } catch (error) {
+    // Handle errors
+    console.log("Refresh Failed");
+    res.statusCode = 500;
+    res.end("Refresh Failed");
+  }
 });
+
+async function OverseerrMediaRefresh(connectSid, res) {
+  try {
+    const result = await axios.post(
+      config.overseerr.urlAvailabilitySync,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "Api-Key": config.overseerr.apiKey,
+          Cookie: "connect.sid=" + connectSid,
+        },
+      }
+    );
+  } catch (error) {
+    // Handle errors in the HTTP GET request
+    console.error("Error in HTTP POST request:", error.message);
+  }
+}
+
+async function OverseerrLogin(req, res) {
+  let connectSid = null;
+  try {
+    const requestBody = {
+      email: config.overseerr.email,
+      password: config.overseerr.password,
+    };
+
+    const response = await axios.post(config.overseerr.urlLogin, requestBody, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    // Parse the cookies headers into the extractCookieValue to get the connect.sid value
+    const cookieArray = String(response.headers["set-cookie"]).split("; ");
+    connectSid = extractCookieValue(cookieArray, "set-cookie");
+  } catch (error) {
+    // Handle errors in the HTTP GET request
+    console.error("Error in HTTP GET request:", error.message);
+  }
+  return connectSid;
+}
 
 async function RefreshPlexMovies(req, res) {
   try {
     const refreshPlexMovies =
       config.plex.urlRefreshMovies + "?X-Plex-Token=" + config.plex.token;
     const response = await axios.get(refreshPlexMovies);
-
-    res.statusCode = 200;
-    res.setHeader("Content-Type", "text/plain");
-    res.end("Plex Movies Refreshed Successfully");
   } catch (error) {
     // Handle errors in the HTTP GET request
     console.error("Error in HTTP GET request:", error.message);
-    res.statusCode = 500;
-    res.setHeader("Content-Type", "text/plain");
-    res.end("Internal Server Error\n");
   }
 }
 
@@ -39,18 +96,11 @@ async function RefreshPlexTv(req, res) {
   try {
     const refreshPlexTv =
       config.plex.urlRefreshTv + "?X-Plex-Token=" + config.plex.token;
-    console.log(plexUrl);
+    console.log(refreshPlexTv);
     const response = await axios.get(refreshPlexTv);
-
-    res.statusCode = 200;
-    res.setHeader("Content-Type", "text/plain");
-    res.end("Plex Tv Refreshed Successfully");
   } catch (error) {
     // Handle errors in the HTTP GET request
     console.error("Error in HTTP GET request:", error.message);
-    res.statusCode = 500;
-    res.setHeader("Content-Type", "text/plain");
-    res.end("Internal Server Error\n");
   }
 }
 
