@@ -1,19 +1,17 @@
 var config = {};
 
 config.plex = {
-  urlRefreshMovies: "***REMOVED***",
-  urlRefreshTv: "***REMOVED***",
-  token: "s***REMOVED***",
+  urlRefreshMovies: "plexMovieUrl",
+  urlRefreshTv: "plexTvUrl",
+  token: "plexToken",
 };
 
 config.overseerr = {
-  urlLogin: "***REMOVED***",
-  urlAvailabilitySync:
-    "***REMOVED***",
-  email: "***REMOVED***",
-  password: "***REMOVED***",
-  apiKey:
-    "***REMOVED***",
+  urlLogin: "overseerrLoginUrl",
+  urlAvailabilitySync: "overseerrAvailabilitySyncUrl",
+  email: "overseerrEmail",
+  password: "overseerrPassowrd",
+  apiKey: "overseerrApiKey",
 };
 
 config.port = 3000;
