@@ -48,7 +48,5 @@ jobs:
             -t tsemovic/resthomeserver:latest \
             -t tsemovic/resthomeserver:$(date +%Y%m%d%H%M%S) \
             -f ./Dockerfile \
+            --push
             .
-  
-          docker push your-dockerhub-username/your-repo-name:latest
-          docker push your-dockerhub-username/your-repo-name:$(date +%Y%m%d%H%M%S)
