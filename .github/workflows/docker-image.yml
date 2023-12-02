@@ -48,5 +48,5 @@ jobs:
             -t tsemovic/resthomeserver:latest \
             -t tsemovic/resthomeserver:$(date +%Y%m%d%H%M%S) \
             -f ./Dockerfile \
-            --push
+            --push \
             .
