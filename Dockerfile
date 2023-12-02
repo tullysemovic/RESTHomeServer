@@ -1,17 +1,20 @@
-# Use an official Node.js runtime as a base image
-FROM node:18
+# syntax=docker/dockerfile:1
 
-# Set the working directory in the container
-WORKDIR /server
 
-# Copy package.json and package-lock.json to the working directory
+FROM node=16.20.1
+
+RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
+
+WORKDIR /home/node/app
+
 COPY package*.json ./
 
-# Install app dependencies
+USER node
+
 RUN npm install
 
-# Bundle app source
-COPY . .
+COPY --chown=node:node . .
 
-# Define the command to run your application
-CMD ["node", "app.js"]
+EXPOSE 8080
+
+CMD [ "npm", "start.js" ]
