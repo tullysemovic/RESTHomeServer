@@ -33,18 +33,22 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
-        with:
-          images: tsemovic/resthomeserver
-      
-      - name: Build and push Docker image
-        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          platforms: linux/arm/v7
+      - name: Build and Push Docker Image
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  
+          docker buildx create --use
+          docker buildx inspect --bootstrap
+  
+          docker buildx build \
+            --platform linux/arm/v7 \
+            -t tsemovic/resthomeserver:latest \
+            -t tsemovic/resthomeserver:$(date +%Y%m%d%H%M%S) \
+            -f ./Dockerfile \
+            .
+  
+          docker push your-dockerhub-username/your-repo-name:latest
+          docker push your-dockerhub-username/your-repo-name:$(date +%Y%m%d%H%M%S)
